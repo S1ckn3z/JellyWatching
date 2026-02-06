@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "category": "General",
+    "description": "JellyWatching monitors consecutive episode playback per user and device. After a configurable number of episodes, it pauses playback and displays a confirmation message, similar to the Netflix 'Are you still watching?' feature. Supports flexible thresholds, night mode, per-user overrides, and activity detection.\n",
+    "guid": "a4c0e2f8-3b7d-4e6a-9f1c-8d5e2b0a7c34",
+    "name": "JellyWatching",
+    "overview": "Are you still watching? Pauses playback after consecutive episodes.",
+    "owner": "jellyfin",
+    "versions": [
+      {
+        "changelog": "Initial public release with standalone CI/CD, plugin manifest, and logo.",
+        "checksum": "b28601acd0beaf6b7063e623726eb3dc",
+        "sourceUrl": "https://github.com/S1ckn3z/JellyWatching/releases/download/v1.1.0.0/jellywatching_v1.1.0.0.zip",
+        "targetAbi": "10.11.0.0",
+        "timestamp": "2026-02-06T22:16:53Z",
+        "version": "1.1.0.0"
+      }
+    ]
+  }
+]
