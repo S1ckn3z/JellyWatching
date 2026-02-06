@@ -11,4 +11,5 @@ docker-compose.yml
 
 # Claude Code
 .claude/
+CLAUDE.md
 .claude.json
