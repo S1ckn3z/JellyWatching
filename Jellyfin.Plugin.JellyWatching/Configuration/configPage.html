@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JellyWatching</title>
+</head>
+<body>
+    <div id="JellyWatchingConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-select,emby-checkbox">
+        <div data-role="content">
+            <div class="content-primary">
+                <h2>JellyWatching Settings</h2>
+                <p>Configure the "Are you still watching?" behavior for consecutive episode playback.</p>
+                <form id="JellyWatchingConfigForm">
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="EnablePlugin" name="EnablePlugin" type="checkbox" is="emby-checkbox" />
+                            <span>Enable Plugin</span>
+                        </label>
+                        <div class="fieldDescription">Globally enable or disable JellyWatching.</div>
+                    </div>
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="ThresholdMode">Threshold Mode</label>
+                        <select is="emby-select" id="ThresholdMode" name="ThresholdMode" class="emby-select-withcolor emby-select">
+                            <option value="EpisodeOnly">Episode Count Only</option>
+                            <option value="TimeOnly">Watch Time Only</option>
+                            <option value="EpisodeAndTime">Episode Count AND Watch Time (both must be exceeded)</option>
+                            <option value="EpisodeOrTime">Episode Count OR Watch Time (either triggers)</option>
+                        </select>
+                        <div class="fieldDescription">How the thresholds are evaluated to trigger the prompt.</div>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="EpisodeThreshold">Episode Threshold</label>
+                        <input id="EpisodeThreshold" name="EpisodeThreshold" type="number" is="emby-input" min="1" max="20" step="1" />
+                        <div class="fieldDescription">Number of consecutive episodes before the prompt appears (1-20). Used in Episode and combined modes.</div>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="TimeThresholdMinutes">Watch Time Threshold (minutes)</label>
+                        <input id="TimeThresholdMinutes" name="TimeThresholdMinutes" type="number" is="emby-input" min="5" max="480" step="5" />
+                        <div class="fieldDescription">Continuous watch time in minutes before the prompt appears (5-480). Used in Time and combined modes.</div>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="SessionTimeoutMinutes">Session Timeout (minutes)</label>
+                        <input id="SessionTimeoutMinutes" name="SessionTimeoutMinutes" type="number" is="emby-input" min="10" max="240" step="5" />
+                        <div class="fieldDescription">Inactive sessions are cleaned up after this many minutes (10-240).</div>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="CustomMessage">Custom Message</label>
+                        <input id="CustomMessage" name="CustomMessage" type="text" is="emby-input" />
+                        <div class="fieldDescription">Message displayed when the prompt appears.</div>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="AutoPauseEnabled" name="AutoPauseEnabled" type="checkbox" is="emby-checkbox" />
+                            <span>Auto-Pause</span>
+                        </label>
+                        <div class="fieldDescription">Automatically pause playback when the threshold is reached. User presses Play to confirm and continue.</div>
+                    </div>
+
+                    <h3 style="margin-top: 2em;">Activity Detection</h3>
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="ActivityDetectionEnabled" name="ActivityDetectionEnabled" type="checkbox" is="emby-checkbox" />
+                            <span>Enable Activity Detection</span>
+                        </label>
+                        <div class="fieldDescription">Detect user activity (seeking, audio/subtitle track changes) and reset the watch time counter. Episode count is not affected.</div>
+                    </div>
+
+                    <h3 style="margin-top: 2em;">Night Mode</h3>
+                    <p>Apply stricter thresholds during a configurable time window (e.g., late night).</p>
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="NightModeEnabled" name="NightModeEnabled" type="checkbox" is="emby-checkbox" />
+                            <span>Enable Night Mode</span>
+                        </label>
+                        <div class="fieldDescription">When enabled, stricter thresholds apply during the configured time window.</div>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="NightModeStartHour">Night Mode Start Hour (0-23)</label>
+                        <input id="NightModeStartHour" name="NightModeStartHour" type="number" is="emby-input" min="0" max="23" step="1" />
+                        <div class="fieldDescription">Hour when night mode begins (server local time). E.g., 22 for 10 PM.</div>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="NightModeEndHour">Night Mode End Hour (0-23)</label>
+                        <input id="NightModeEndHour" name="NightModeEndHour" type="number" is="emby-input" min="0" max="23" step="1" />
+                        <div class="fieldDescription">Hour when night mode ends (server local time). E.g., 6 for 6 AM. Can be less than start hour for overnight windows.</div>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="NightModeEpisodeThreshold">Night Mode Episode Threshold</label>
+                        <input id="NightModeEpisodeThreshold" name="NightModeEpisodeThreshold" type="number" is="emby-input" min="1" max="20" step="1" />
+                        <div class="fieldDescription">Episode threshold during night mode (typically lower than the global setting).</div>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="NightModeTimeThresholdMinutes">Night Mode Time Threshold (minutes)</label>
+                        <input id="NightModeTimeThresholdMinutes" name="NightModeTimeThresholdMinutes" type="number" is="emby-input" min="5" max="480" step="5" />
+                        <div class="fieldDescription">Time threshold during night mode (typically lower than the global setting).</div>
+                    </div>
+
+                    <div>
+                        <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </form>
+
+                <h3 style="margin-top: 2em;">Per-User Settings</h3>
+                <p>Override global settings for individual users. Fields left unchecked use the global default.</p>
+                <div class="selectContainer">
+                    <label class="selectLabel" for="UserSelect">Select User</label>
+                    <select is="emby-select" id="UserSelect" class="emby-select-withcolor emby-select">
+                        <option value="">-- Select a user --</option>
+                    </select>
+                </div>
+                <div id="UserSettingsPanel" style="display:none; margin-top: 1em; padding: 1em; background: rgba(0,0,0,0.1); border-radius: 4px;">
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="UserEnabled" type="checkbox" is="emby-checkbox" />
+                            <span>Plugin Enabled for this User</span>
+                        </label>
+                        <div class="fieldDescription">Uncheck to completely disable JellyWatching for this user.</div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:1em;">
+                        <input id="UserEpisodeThresholdOverride" type="checkbox" style="width:auto;" />
+                        <div class="inputContainer" style="flex:1; margin:0;">
+                            <label class="inputLabel inputLabelUnfocused" for="UserEpisodeThreshold">Episode Threshold</label>
+                            <input id="UserEpisodeThreshold" type="number" is="emby-input" min="1" max="20" step="1" disabled />
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:0.5em;">
+                        <input id="UserTimeThresholdOverride" type="checkbox" style="width:auto;" />
+                        <div class="inputContainer" style="flex:1; margin:0;">
+                            <label class="inputLabel inputLabelUnfocused" for="UserTimeThresholdMinutes">Time Threshold (minutes)</label>
+                            <input id="UserTimeThresholdMinutes" type="number" is="emby-input" min="5" max="480" step="5" disabled />
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:0.5em;">
+                        <input id="UserThresholdModeOverride" type="checkbox" style="width:auto;" />
+                        <div class="selectContainer" style="flex:1; margin:0;">
+                            <label class="selectLabel" for="UserThresholdMode">Threshold Mode</label>
+                            <select is="emby-select" id="UserThresholdMode" class="emby-select-withcolor emby-select" disabled>
+                                <option value="EpisodeOnly">Episode Count Only</option>
+                                <option value="TimeOnly">Watch Time Only</option>
+                                <option value="EpisodeAndTime">Episode AND Time</option>
+                                <option value="EpisodeOrTime">Episode OR Time</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:0.5em;">
+                        <input id="UserCustomMessageOverride" type="checkbox" style="width:auto;" />
+                        <div class="inputContainer" style="flex:1; margin:0;">
+                            <label class="inputLabel inputLabelUnfocused" for="UserCustomMessage">Custom Message</label>
+                            <input id="UserCustomMessage" type="text" is="emby-input" disabled />
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:0.5em;">
+                        <input id="UserAutoPauseOverride" type="checkbox" style="width:auto;" />
+                        <div class="checkboxContainer" style="flex:1; margin:0;">
+                            <label class="emby-checkbox-label">
+                                <input id="UserAutoPauseEnabled" type="checkbox" is="emby-checkbox" disabled />
+                                <span>Auto-Pause</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-top: 1.5em;">Per-User Night Mode Overrides</h4>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:0.5em;">
+                        <input id="UserNightModeEnabledOverride" type="checkbox" style="width:auto;" />
+                        <div class="checkboxContainer" style="flex:1; margin:0;">
+                            <label class="emby-checkbox-label">
+                                <input id="UserNightModeEnabled" type="checkbox" is="emby-checkbox" disabled />
+                                <span>Night Mode Enabled</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:0.5em;">
+                        <input id="UserNightModeStartHourOverride" type="checkbox" style="width:auto;" />
+                        <div class="inputContainer" style="flex:1; margin:0;">
+                            <label class="inputLabel inputLabelUnfocused" for="UserNightModeStartHour">Night Start Hour</label>
+                            <input id="UserNightModeStartHour" type="number" is="emby-input" min="0" max="23" step="1" disabled />
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:0.5em;">
+                        <input id="UserNightModeEndHourOverride" type="checkbox" style="width:auto;" />
+                        <div class="inputContainer" style="flex:1; margin:0;">
+                            <label class="inputLabel inputLabelUnfocused" for="UserNightModeEndHour">Night End Hour</label>
+                            <input id="UserNightModeEndHour" type="number" is="emby-input" min="0" max="23" step="1" disabled />
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:0.5em;">
+                        <input id="UserNightEpisodeThresholdOverride" type="checkbox" style="width:auto;" />
+                        <div class="inputContainer" style="flex:1; margin:0;">
+                            <label class="inputLabel inputLabelUnfocused" for="UserNightEpisodeThreshold">Night Episode Threshold</label>
+                            <input id="UserNightEpisodeThreshold" type="number" is="emby-input" min="1" max="20" step="1" disabled />
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:0.5em;">
+                        <input id="UserNightTimeThresholdOverride" type="checkbox" style="width:auto;" />
+                        <div class="inputContainer" style="flex:1; margin:0;">
+                            <label class="inputLabel inputLabelUnfocused" for="UserNightTimeThresholdMinutes">Night Time Threshold (min)</label>
+                            <input id="UserNightTimeThresholdMinutes" type="number" is="emby-input" min="5" max="480" step="5" disabled />
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5em; display:flex; gap:8px;">
+                        <button is="emby-button" type="button" id="SaveUserSettings" class="raised button-submit emby-button">
+                            <span>Save User Settings</span>
+                        </button>
+                        <button is="emby-button" type="button" id="RemoveUserSettings" class="raised emby-button" style="background:#c62828;">
+                            <span>Remove User Overrides</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var JellyWatchingConfig = {
+                pluginUniqueId: 'a4c0e2f8-3b7d-4e6a-9f1c-8d5e2b0a7c34'
+            };
+
+            // Override checkbox toggle logic
+            var overrideToggles = [
+                { toggle: 'UserEpisodeThresholdOverride', input: 'UserEpisodeThreshold' },
+                { toggle: 'UserTimeThresholdOverride', input: 'UserTimeThresholdMinutes' },
+                { toggle: 'UserThresholdModeOverride', input: 'UserThresholdMode' },
+                { toggle: 'UserCustomMessageOverride', input: 'UserCustomMessage' },
+                { toggle: 'UserAutoPauseOverride', input: 'UserAutoPauseEnabled' },
+                { toggle: 'UserNightModeEnabledOverride', input: 'UserNightModeEnabled' },
+                { toggle: 'UserNightModeStartHourOverride', input: 'UserNightModeStartHour' },
+                { toggle: 'UserNightModeEndHourOverride', input: 'UserNightModeEndHour' },
+                { toggle: 'UserNightEpisodeThresholdOverride', input: 'UserNightEpisodeThreshold' },
+                { toggle: 'UserNightTimeThresholdOverride', input: 'UserNightTimeThresholdMinutes' }
+            ];
+
+            overrideToggles.forEach(function(pair) {
+                document.getElementById(pair.toggle).addEventListener('change', function() {
+                    document.getElementById(pair.input).disabled = !this.checked;
+                });
+            });
+
+            // Load global config
+            document.querySelector('#JellyWatchingConfigPage')
+                .addEventListener('pageshow', function() {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(JellyWatchingConfig.pluginUniqueId).then(function (config) {
+                        document.querySelector('#EnablePlugin').checked = config.EnablePlugin;
+                        document.querySelector('#ThresholdMode').value = config.ThresholdMode;
+                        document.querySelector('#EpisodeThreshold').value = config.EpisodeThreshold;
+                        document.querySelector('#TimeThresholdMinutes').value = config.TimeThresholdMinutes;
+                        document.querySelector('#SessionTimeoutMinutes').value = config.SessionTimeoutMinutes;
+                        document.querySelector('#CustomMessage').value = config.CustomMessage;
+                        document.querySelector('#AutoPauseEnabled').checked = config.AutoPauseEnabled;
+                        document.querySelector('#ActivityDetectionEnabled').checked = config.ActivityDetectionEnabled;
+                        document.querySelector('#NightModeEnabled').checked = config.NightModeEnabled;
+                        document.querySelector('#NightModeStartHour').value = config.NightModeStartHour;
+                        document.querySelector('#NightModeEndHour').value = config.NightModeEndHour;
+                        document.querySelector('#NightModeEpisodeThreshold').value = config.NightModeEpisodeThreshold;
+                        document.querySelector('#NightModeTimeThresholdMinutes').value = config.NightModeTimeThresholdMinutes;
+                        Dashboard.hideLoadingMsg();
+                    });
+
+                    // Load users into dropdown
+                    ApiClient.getUsers().then(function(users) {
+                        var select = document.getElementById('UserSelect');
+                        // Clear existing options except the first placeholder
+                        while (select.options.length > 1) {
+                            select.remove(1);
+                        }
+                        users.forEach(function(user) {
+                            var opt = document.createElement('option');
+                            opt.value = user.Id;
+                            opt.textContent = user.Name;
+                            select.appendChild(opt);
+                        });
+                    });
+                });
+
+            // Save global config
+            document.querySelector('#JellyWatchingConfigForm')
+                .addEventListener('submit', function(e) {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(JellyWatchingConfig.pluginUniqueId).then(function (config) {
+                        config.EnablePlugin = document.querySelector('#EnablePlugin').checked;
+                        config.ThresholdMode = document.querySelector('#ThresholdMode').value;
+                        config.EpisodeThreshold = parseInt(document.querySelector('#EpisodeThreshold').value, 10);
+                        config.TimeThresholdMinutes = parseInt(document.querySelector('#TimeThresholdMinutes').value, 10);
+                        config.SessionTimeoutMinutes = parseInt(document.querySelector('#SessionTimeoutMinutes').value, 10);
+                        config.CustomMessage = document.querySelector('#CustomMessage').value;
+                        config.AutoPauseEnabled = document.querySelector('#AutoPauseEnabled').checked;
+                        config.ActivityDetectionEnabled = document.querySelector('#ActivityDetectionEnabled').checked;
+                        config.NightModeEnabled = document.querySelector('#NightModeEnabled').checked;
+                        config.NightModeStartHour = parseInt(document.querySelector('#NightModeStartHour').value, 10);
+                        config.NightModeEndHour = parseInt(document.querySelector('#NightModeEndHour').value, 10);
+                        config.NightModeEpisodeThreshold = parseInt(document.querySelector('#NightModeEpisodeThreshold').value, 10);
+                        config.NightModeTimeThresholdMinutes = parseInt(document.querySelector('#NightModeTimeThresholdMinutes').value, 10);
+                        ApiClient.updatePluginConfiguration(JellyWatchingConfig.pluginUniqueId, config).then(function (result) {
+                            Dashboard.processPluginConfigurationUpdateResult(result);
+                        });
+                    });
+
+                    e.preventDefault();
+                    return false;
+                });
+
+            // User selection: load per-user settings
+            document.getElementById('UserSelect').addEventListener('change', function() {
+                var userId = this.value;
+                var panel = document.getElementById('UserSettingsPanel');
+                if (!userId) {
+                    panel.style.display = 'none';
+                    return;
+                }
+
+                panel.style.display = 'block';
+                ApiClient.getPluginConfiguration(JellyWatchingConfig.pluginUniqueId).then(function(config) {
+                    var list = config.UserSettingsList || [];
+                    var entry = list.find(function(e) { return e.UserId === userId; });
+                    var settings = entry ? entry.Settings : null;
+
+                    // Reset all override checkboxes and disable inputs
+                    overrideToggles.forEach(function(pair) {
+                        document.getElementById(pair.toggle).checked = false;
+                        document.getElementById(pair.input).disabled = true;
+                    });
+
+                    // Set defaults
+                    document.getElementById('UserEnabled').checked = true;
+                    document.getElementById('UserEpisodeThreshold').value = config.EpisodeThreshold;
+                    document.getElementById('UserTimeThresholdMinutes').value = config.TimeThresholdMinutes;
+                    document.getElementById('UserThresholdMode').value = config.ThresholdMode;
+                    document.getElementById('UserCustomMessage').value = config.CustomMessage;
+                    document.getElementById('UserAutoPauseEnabled').checked = config.AutoPauseEnabled;
+                    document.getElementById('UserNightModeEnabled').checked = config.NightModeEnabled;
+                    document.getElementById('UserNightModeStartHour').value = config.NightModeStartHour;
+                    document.getElementById('UserNightModeEndHour').value = config.NightModeEndHour;
+                    document.getElementById('UserNightEpisodeThreshold').value = config.NightModeEpisodeThreshold;
+                    document.getElementById('UserNightTimeThresholdMinutes').value = config.NightModeTimeThresholdMinutes;
+
+                    if (settings) {
+                        document.getElementById('UserEnabled').checked = settings.Enabled;
+
+                        if (settings.EpisodeThreshold !== null && settings.EpisodeThreshold !== undefined) {
+                            document.getElementById('UserEpisodeThresholdOverride').checked = true;
+                            document.getElementById('UserEpisodeThreshold').disabled = false;
+                            document.getElementById('UserEpisodeThreshold').value = settings.EpisodeThreshold;
+                        }
+                        if (settings.TimeThresholdMinutes !== null && settings.TimeThresholdMinutes !== undefined) {
+                            document.getElementById('UserTimeThresholdOverride').checked = true;
+                            document.getElementById('UserTimeThresholdMinutes').disabled = false;
+                            document.getElementById('UserTimeThresholdMinutes').value = settings.TimeThresholdMinutes;
+                        }
+                        if (settings.ThresholdMode !== null && settings.ThresholdMode !== undefined) {
+                            document.getElementById('UserThresholdModeOverride').checked = true;
+                            document.getElementById('UserThresholdMode').disabled = false;
+                            document.getElementById('UserThresholdMode').value = settings.ThresholdMode;
+                        }
+                        if (settings.CustomMessage !== null && settings.CustomMessage !== undefined) {
+                            document.getElementById('UserCustomMessageOverride').checked = true;
+                            document.getElementById('UserCustomMessage').disabled = false;
+                            document.getElementById('UserCustomMessage').value = settings.CustomMessage;
+                        }
+                        if (settings.AutoPauseEnabled !== null && settings.AutoPauseEnabled !== undefined) {
+                            document.getElementById('UserAutoPauseOverride').checked = true;
+                            document.getElementById('UserAutoPauseEnabled').disabled = false;
+                            document.getElementById('UserAutoPauseEnabled').checked = settings.AutoPauseEnabled;
+                        }
+                        if (settings.NightModeEnabled !== null && settings.NightModeEnabled !== undefined) {
+                            document.getElementById('UserNightModeEnabledOverride').checked = true;
+                            document.getElementById('UserNightModeEnabled').disabled = false;
+                            document.getElementById('UserNightModeEnabled').checked = settings.NightModeEnabled;
+                        }
+                        if (settings.NightModeStartHour !== null && settings.NightModeStartHour !== undefined) {
+                            document.getElementById('UserNightModeStartHourOverride').checked = true;
+                            document.getElementById('UserNightModeStartHour').disabled = false;
+                            document.getElementById('UserNightModeStartHour').value = settings.NightModeStartHour;
+                        }
+                        if (settings.NightModeEndHour !== null && settings.NightModeEndHour !== undefined) {
+                            document.getElementById('UserNightModeEndHourOverride').checked = true;
+                            document.getElementById('UserNightModeEndHour').disabled = false;
+                            document.getElementById('UserNightModeEndHour').value = settings.NightModeEndHour;
+                        }
+                        if (settings.NightModeEpisodeThreshold !== null && settings.NightModeEpisodeThreshold !== undefined) {
+                            document.getElementById('UserNightEpisodeThresholdOverride').checked = true;
+                            document.getElementById('UserNightEpisodeThreshold').disabled = false;
+                            document.getElementById('UserNightEpisodeThreshold').value = settings.NightModeEpisodeThreshold;
+                        }
+                        if (settings.NightModeTimeThresholdMinutes !== null && settings.NightModeTimeThresholdMinutes !== undefined) {
+                            document.getElementById('UserNightTimeThresholdOverride').checked = true;
+                            document.getElementById('UserNightTimeThresholdMinutes').disabled = false;
+                            document.getElementById('UserNightTimeThresholdMinutes').value = settings.NightModeTimeThresholdMinutes;
+                        }
+                    }
+                });
+            });
+
+            // Save per-user settings
+            document.getElementById('SaveUserSettings').addEventListener('click', function() {
+                var userId = document.getElementById('UserSelect').value;
+                if (!userId) return;
+
+                var userName = document.getElementById('UserSelect').options[document.getElementById('UserSelect').selectedIndex].textContent;
+
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(JellyWatchingConfig.pluginUniqueId).then(function(config) {
+                    if (!config.UserSettingsList) {
+                        config.UserSettingsList = [];
+                    }
+
+                    // Remove existing entry for this user
+                    config.UserSettingsList = config.UserSettingsList.filter(function(e) { return e.UserId !== userId; });
+
+                    var settings = {
+                        Enabled: document.getElementById('UserEnabled').checked,
+                        EpisodeThreshold: document.getElementById('UserEpisodeThresholdOverride').checked
+                            ? parseInt(document.getElementById('UserEpisodeThreshold').value, 10) : null,
+                        TimeThresholdMinutes: document.getElementById('UserTimeThresholdOverride').checked
+                            ? parseInt(document.getElementById('UserTimeThresholdMinutes').value, 10) : null,
+                        ThresholdMode: document.getElementById('UserThresholdModeOverride').checked
+                            ? document.getElementById('UserThresholdMode').value : null,
+                        CustomMessage: document.getElementById('UserCustomMessageOverride').checked
+                            ? document.getElementById('UserCustomMessage').value : null,
+                        AutoPauseEnabled: document.getElementById('UserAutoPauseOverride').checked
+                            ? document.getElementById('UserAutoPauseEnabled').checked : null,
+                        NightModeEnabled: document.getElementById('UserNightModeEnabledOverride').checked
+                            ? document.getElementById('UserNightModeEnabled').checked : null,
+                        NightModeStartHour: document.getElementById('UserNightModeStartHourOverride').checked
+                            ? parseInt(document.getElementById('UserNightModeStartHour').value, 10) : null,
+                        NightModeEndHour: document.getElementById('UserNightModeEndHourOverride').checked
+                            ? parseInt(document.getElementById('UserNightModeEndHour').value, 10) : null,
+                        NightModeEpisodeThreshold: document.getElementById('UserNightEpisodeThresholdOverride').checked
+                            ? parseInt(document.getElementById('UserNightEpisodeThreshold').value, 10) : null,
+                        NightModeTimeThresholdMinutes: document.getElementById('UserNightTimeThresholdOverride').checked
+                            ? parseInt(document.getElementById('UserNightTimeThresholdMinutes').value, 10) : null
+                    };
+
+                    config.UserSettingsList.push({
+                        UserId: userId,
+                        UserName: userName,
+                        Settings: settings
+                    });
+
+                    ApiClient.updatePluginConfiguration(JellyWatchingConfig.pluginUniqueId, config).then(function(result) {
+                        Dashboard.processPluginConfigurationUpdateResult(result);
+                    });
+                });
+            });
+
+            // Remove per-user settings
+            document.getElementById('RemoveUserSettings').addEventListener('click', function() {
+                var userId = document.getElementById('UserSelect').value;
+                if (!userId) return;
+
+                Dashboard.showLoadingMsg();
+                ApiClient.getPluginConfiguration(JellyWatchingConfig.pluginUniqueId).then(function(config) {
+                    if (!config.UserSettingsList) {
+                        config.UserSettingsList = [];
+                    }
+                    config.UserSettingsList = config.UserSettingsList.filter(function(e) { return e.UserId !== userId; });
+                    ApiClient.updatePluginConfiguration(JellyWatchingConfig.pluginUniqueId, config).then(function(result) {
+                        Dashboard.processPluginConfigurationUpdateResult(result);
+                        // Reset the panel by re-triggering user selection
+                        document.getElementById('UserSelect').dispatchEvent(new Event('change'));
+                    });
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

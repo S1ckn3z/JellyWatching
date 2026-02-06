@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="eyeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00A4DC"/>
+      <stop offset="100%" stop-color="#0070A0"/>
+    </linearGradient>
+    <linearGradient id="playGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E0E0E0"/>
+    </linearGradient>
+  </defs>
+  <!-- Eye shape (almond) -->
+  <path d="M256 120 C140 120 50 256 50 256 S140 392 256 392 C372 392 462 256 462 256 S372 120 256 120 Z"
+        fill="url(#eyeGrad)" stroke="#005580" stroke-width="8"/>
+  <!-- Iris circle -->
+  <circle cx="256" cy="256" r="100" fill="#003D5C"/>
+  <!-- Pupil circle -->
+  <circle cx="256" cy="256" r="65" fill="#001A2E"/>
+  <!-- Play triangle as pupil highlight -->
+  <polygon points="238,224 238,288 286,256" fill="url(#playGrad)"/>
+  <!-- Catch light -->
+  <circle cx="280" cy="232" r="12" fill="white" opacity="0.6"/>
+</svg>

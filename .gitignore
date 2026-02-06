@@ -1,0 +1,15 @@
+bin/
+obj/
+.vs/
+.vscode/
+.idea/
+artifacts
+
+# Docker test environment
+docker/
+docker-compose.yml
+
+# Claude Code
+.claude/
+CLAUDE.md
+.claude.json
