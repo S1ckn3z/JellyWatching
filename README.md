@@ -1,71 +1,116 @@
-# JellyWatching
+<p align="center">
+  <img src="Jellyfin.Plugin.JellyWatching/logo.svg" alt="JellyWatching Logo" width="160"/>
+</p>
 
-A Jellyfin plugin that pauses playback after consecutive episodes and asks "Are you still watching?" — just like Netflix.
+<h1 align="center">JellyWatching</h1>
+
+<p align="center">
+  <em>Are you still watching?</em><br/>
+  A Jellyfin plugin that pauses playback after consecutive episodes — just like the streaming giants.
+</p>
+
+<p align="center">
+  <a href="https://github.com/S1ckn3z/JellyWatching/actions/workflows/build.yaml">
+    <img src="https://github.com/S1ckn3z/JellyWatching/actions/workflows/build.yaml/badge.svg" alt="Build"/>
+  </a>
+  <a href="https://github.com/S1ckn3z/JellyWatching/releases/latest">
+    <img src="https://img.shields.io/github/v/release/S1ckn3z/JellyWatching?label=latest" alt="Latest Release"/>
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/S1ckn3z/JellyWatching" alt="License"/>
+  </a>
+</p>
+
+---
+
+## How It Works
+
+JellyWatching tracks consecutive episode playback **per user and device**. Once a configurable threshold is reached, it pauses playback and displays a message asking the viewer to confirm they're still there. When the user presses play, the counters reset and watching continues normally.
 
 ## Features
 
-- **Episode counting** — Tracks consecutive episode playback per user and device
-- **Auto-pause** — Pauses playback and displays a confirmation message after the configured threshold
-- **Flexible thresholds** — Trigger by episode count, watch time, or both
-- **Night mode** — Stricter thresholds during configurable nighttime hours
-- **Per-user overrides** — Different settings for each user
-- **Activity detection** — Seeking or changing audio tracks resets the timer
-- **Custom messages** — Configurable prompt text
+- **Episode & time thresholds** — Trigger after a number of episodes, a duration of watch time, or both
+- **Auto-pause** — Automatically pauses playback when the threshold is hit
+- **Night mode** — Apply stricter thresholds during nighttime hours
+- **Per-user overrides** — Customize behavior for individual users
+- **Activity detection** — Seeking or switching audio/subtitle tracks proves the user is active and resets the timer
+- **Custom messages** — Change the prompt text to whatever you like
+- **Web config UI** — Configure everything from the Jellyfin dashboard
 
 ## Installation
 
-### Via Repository (recommended)
+### Repository (recommended)
 
 1. In Jellyfin, go to **Dashboard → Plugins → Repositories**
-2. Click **Add** and enter:
-   - **Name:** `JellyWatching`
-   - **URL:** `https://S1ckn3z.github.io/JellyWatching/manifest.json`
-3. Go to the **Catalog** tab, find **JellyWatching** under General, and click **Install**
+2. Add a new repository:
+
+   | Field | Value |
+   |-------|-------|
+   | Name  | `JellyWatching` |
+   | URL   | `https://s1ckn3z.github.io/JellyWatching/manifest.json` |
+
+3. Go to **Catalog** → find **JellyWatching** under *General* → click **Install**
 4. Restart Jellyfin
 
-### Manual Installation
+### Manual
 
-1. Download the latest `jellywatching_*.zip` from [Releases](../../releases/latest)
-2. Extract into your Jellyfin plugins directory (e.g. `<data>/plugins/JellyWatching/`)
+1. Download `jellywatching_*.zip` from the [latest release](https://github.com/S1ckn3z/JellyWatching/releases/latest)
+2. Extract into your Jellyfin plugins directory:
+   - **Windows:** `%LOCALAPPDATA%\jellyfin\plugins\JellyWatching\`
+   - **Linux:** `~/.local/share/jellyfin/plugins/JellyWatching/`
+   - **Docker:** `/config/plugins/JellyWatching/`
 3. Restart Jellyfin
 
 ## Configuration
 
-After installation, go to **Dashboard → Plugins → JellyWatching** to configure:
+After installation, navigate to **Dashboard → Plugins → JellyWatching**.
+
+### General
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| Enable Plugin | `true` | Global on/off switch |
-| Episode Threshold | `3` | Number of consecutive episodes before prompting |
+| Enable Plugin | On | Global on/off switch |
+| Episode Threshold | `3` | Episodes before prompting |
 | Time Threshold | `120 min` | Watch time before prompting |
-| Threshold Mode | Episode Only | `EpisodeOnly`, `TimeOnly`, or `Both` |
-| Session Timeout | `30 min` | Inactivity timeout before session cleanup |
-| Custom Message | "Are you still watching? Press Play to continue." | Message shown to the user |
-| Auto Pause | `true` | Automatically pause playback on intervention |
-| Activity Detection | `true` | Reset timer on seek/track change |
+| Threshold Mode | Episode Only | `EpisodeOnly` · `TimeOnly` · `EpisodeAndTime` · `EpisodeOrTime` |
+| Session Timeout | `30 min` | Idle time before a session is cleaned up |
+| Custom Message | *Are you still watching? Press Play to continue.* | Text shown to the viewer |
+| Auto Pause | On | Pause playback when the prompt appears |
+| Activity Detection | On | Reset timer when the user seeks or changes tracks |
 
 ### Night Mode
 
+Apply stricter limits during specific hours — useful for preventing kids from watching all night.
+
 | Setting | Default | Description |
 |---------|---------|-------------|
-| Night Mode Enabled | `false` | Enable stricter thresholds at night |
-| Start Hour | `22` | Hour when night mode begins (0-23) |
-| End Hour | `6` | Hour when night mode ends (0-23) |
-| Night Episode Threshold | `2` | Episode threshold during night hours |
-| Night Time Threshold | `60 min` | Time threshold during night hours |
+| Enabled | Off | Activate night mode |
+| Start Hour | `22` | When night mode kicks in (0-23) |
+| End Hour | `6` | When night mode ends (0-23) |
+| Episode Threshold | `2` | Episodes allowed during night hours |
+| Time Threshold | `60 min` | Watch time allowed during night hours |
+
+### Per-User Overrides
+
+Every setting above can be overridden per user through the plugin configuration page. Users without overrides inherit the global defaults.
 
 ## Requirements
 
-- Jellyfin Server **10.11.x**
+| Component | Version |
+|-----------|---------|
+| Jellyfin Server | **10.11.x** |
+| .NET | 9.0 |
 
 ## Building from Source
 
 ```bash
+git clone https://github.com/S1ckn3z/JellyWatching.git
+cd JellyWatching
 dotnet build -c Release
 ```
 
-The compiled DLL will be in `Jellyfin.Plugin.JellyWatching/bin/Release/net9.0/`.
+The compiled DLL will be at `Jellyfin.Plugin.JellyWatching/bin/Release/net9.0/Jellyfin.Plugin.JellyWatching.dll`.
 
 ## License
 
-This plugin is licensed under the [GNU General Public License v3.0](LICENSE).
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
