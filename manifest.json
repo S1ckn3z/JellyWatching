@@ -5,8 +5,16 @@
     "guid": "a4c0e2f8-3b7d-4e6a-9f1c-8d5e2b0a7c34",
     "name": "JellyWatching",
     "overview": "Are you still watching? Pauses playback after consecutive episodes.",
-    "owner": "jellyfin",
+    "owner": "S1ckn3z",
     "versions": [
+      {
+        "changelog": "- Add JellyWatching settings page to dashboard sidebar (main menu)\\n- Add catalog image URL for plugin repository listing\\n- Correct plugin owner metadata in manifest source\\n- Add raw manifest URL fallback to README",
+        "checksum": "dd186b7145a66fc18972bda6be1511e3",
+        "sourceUrl": "https://github.com/S1ckn3z/JellyWatching/releases/download/v1.1.0.1/jellywatching_v1.1.0.1.zip",
+        "targetAbi": "10.11.0.0",
+        "timestamp": "2026-02-10T20:51:03Z",
+        "version": "1.1.0.1"
+      },
       {
         "changelog": "Initial public release with standalone CI/CD, plugin manifest, and logo.",
         "checksum": "b28601acd0beaf6b7063e623726eb3dc",
