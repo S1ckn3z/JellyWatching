@@ -49,6 +49,9 @@ JellyWatching tracks consecutive episode playback **per user and device**. Once 
    | Name  | `JellyWatching` |
    | URL   | `https://s1ckn3z.github.io/JellyWatching/manifest.json` |
 
+   If your Jellyfin host cannot reach GitHub Pages, use:
+   `https://raw.githubusercontent.com/S1ckn3z/JellyWatching/gh-pages/manifest.json`
+
 3. Go to **Catalog** → find **JellyWatching** under *General* → click **Install**
 4. Restart Jellyfin
 
